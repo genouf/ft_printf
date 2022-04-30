@@ -6,7 +6,7 @@
 /*   By: genouf <genouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:52:01 by genouf            #+#    #+#             */
-/*   Updated: 2022/04/27 15:57:21 by genouf           ###   ########.fr       */
+/*   Updated: 2022/04/30 20:47:16 by genouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,79 +22,69 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-void	print_result(int index, va_list args)
-{
-	if (index == 1)
-		ft_putchar(va_arg(args, int));
-	else if (index == 2)
-		ft_putstr(va_arg(args, char *));
-	else if (index == 3)
-		ft_putaddr(va_arg(args, char *));
-	else if (index == 4)
-		ft_putnbr(va_arg(args, int));
-	else if 
-}
-
-int find_functions(char c)
+int	print_result(char c, va_list args, int *count)
 {
 	if (c == 'c')
-		return (1);
+		*count += ft_putchar(va_arg(args, int));
 	else if (c == 's')
-		return (2);
+		ft_putstr(va_arg(args, char *), count);
 	else if (c == 'p')
-		return (3);
-	else if (c == 'd')
-		return (4);
-	else if (c == 'i')
-		return (4);
+		ft_putaddr((unsigned long long)va_arg(args, char *), count);
+	else if (c == 'd' || c == 'i')
+		ft_putnbr(va_arg(args, int), count);
 	else if (c == 'u')
-		return (6);
+		ft_putnbr_uns(va_arg(args, unsigned int), count);
 	else if (c == 'x')
-		return (7);
+		ft_puthex((unsigned long)va_arg(args, unsigned int), count);
 	else if (c == 'X')
-		return (8);
+		ft_puthex_maj((unsigned long)va_arg(args, unsigned int), count);
 	else if (c == '%')
-		return (9);
+	{
+		write(1, "%", 1);
+		(*count)++;
+	}
 	else
 		return (0);
+	return (1);
 }
 
-void	ft_parsing(char const *s, ...)
+int	ft_printf(char const *s, ...)
 {
-	int		i;
-	va_list args;
-	
+	size_t		i;
+	int			count;
+	va_list		args;
+
 	i = 0;
+	count = 0;
 	va_start(args, s);
 	while (i < ft_strlen(s))
 	{
 		if (s[i] == '%')
 		{
-			if (find_functions(s[i + 1]))
-			{
-				print_result(find_functions(s[i + 1]), args);
+			if (print_result(s[i + 1], args, &count))
 				i += 2;
-			}
 			else
-			{
-				if (s[i + 1] == ' ')
-					i += 2;
-				else
-					i++;
-			}
+				i++;
 		}		
 		else
-			write(1, &s[i++], 1);
+		{
+			count += ft_putchar(s[i]);
+			i++;
+		}		
 	}
 	va_end(args);
+	return (count);
 }
 
-int	main(void)
+/*int	main(void)
 {
-	char 	c;
+	int		i;
+	char	c;
 	char	str[] = "Orelsan";
 
+	i = -12;
 	c = 'G';
-	ft_parsing("%c : aime%s", c, str);
+	ft_parsing("%X", i);
+	printf("\n%X", i);
 	return (0);
-}
+}*/

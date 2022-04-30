@@ -6,45 +6,71 @@
 /*   By: genouf <genouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 19:59:37 by genouf            #+#    #+#             */
-/*   Updated: 2022/04/27 15:42:20 by genouf           ###   ########.fr       */
+/*   Updated: 2022/04/30 20:50:26 by genouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_printf.h"
 
-void	ft_putchar(char c)
+int	ft_putchar(char c)
 {
 	write(1, &c, 1);
+	return (1);
 }
 
-void	ft_putstr(char *s)
+void	ft_putstr(char *s, int *count)
 {
-	while (*s)
-		write(1, s++, 1);
+	int	i;
+
+	i = 0;
+	if (s == NULL)
+	{
+		write(1, "(null)", 6);
+		*count += 6;
+		return ;
+	}
+	while (s && s[i])
+	{
+		*count += ft_putchar(s[i]);
+		i++;
+	}
 }
 
-void	ft_putnbr(int n)
+void	ft_putnbr(int n, int *count)
 {
 	long	i;
 
 	i = n;
 	if (i < 0)
 	{
-		ft_putchar('-');
+		*count += ft_putchar('-');
 		i = -i;
 	}
 	if (i > 9)
-		ft_putnbr(i / 10);
-	ft_putchar('0' + (i % 10));
+		ft_putnbr(i / 10, count);
+	*count += ft_putchar('0' + (i % 10));
 }
 
-void	ft_putaddr(unsigned long long addr)
+void	ft_putnbr_uns(unsigned int n, int *count)
+{
+	if (n > 9)
+		ft_putnbr_uns(n / 10, count);
+	*count += ft_putchar('0' + (n % 10));
+}
+
+void	ft_putaddr(unsigned long long addr, int *count)
 {
 	int		i;
-	char 	buff[12];
+	char	buff[12];
 
+	if (addr == 0)
+	{
+		write(1, "0x0", 3);
+		*count += 3;
+		return ;
+	}
 	i = 0;
-	while (i < 12)
+	while (addr)
 	{
 		if (addr % 16 >= 10)
 			buff[i] = 'a' + addr % 16 % 10;
@@ -53,8 +79,8 @@ void	ft_putaddr(unsigned long long addr)
 		i++;
 		addr /= 16;
 	}
-	i = 12;
 	write(1, "0x", 2);
+	*count += 2;
 	while (--i > -1)
-		ft_putchar(buff[i]);
+		*count += ft_putchar(buff[i]);
 }
