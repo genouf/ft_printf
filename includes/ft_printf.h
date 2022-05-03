@@ -6,14 +6,12 @@
 /*   By: genouf <genouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:44:39 by genouf            #+#    #+#             */
-/*   Updated: 2022/04/30 20:47:35 by genouf           ###   ########.fr       */
+/*   Updated: 2022/05/03 16:22:36 by genouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
-
-# include <stdio.h>
 
 /* INCLUDE */
 # include <unistd.h>

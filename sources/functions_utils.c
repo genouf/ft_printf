@@ -6,7 +6,7 @@
 /*   By: genouf <genouf@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 19:59:37 by genouf            #+#    #+#             */
-/*   Updated: 2022/04/30 20:50:26 by genouf           ###   ########.fr       */
+/*   Updated: 2022/05/03 16:36:27 by genouf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ void	ft_putnbr_uns(unsigned int n, int *count)
 void	ft_putaddr(unsigned long long addr, int *count)
 {
 	int		i;
-	char	buff[12];
+	char	buff[20];
 
 	if (addr == 0)
 	{
-		write(1, "0x0", 3);
-		*count += 3;
+		write(1, "(nil)", 5);
+		*count += 5;
 		return ;
 	}
 	i = 0;
